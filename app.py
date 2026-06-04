@@ -1,27 +1,24 @@
-from utils.ml_modules import train_valuation_model, predict_valuation
+import streamlit as st
 
-model, accuracy = train_valuation_model(df)
+from utils.data_loader import load_data
+from utils.ml_modules import train_valuation_model
 
-st.sidebar.subheader("🤖 ML Valuation Predictor")
+st.set_page_config(
+    page_title="Startup Analytics Dashboard",
+    page_icon="🚀",
+    layout="wide"
+)
 
-fr = st.sidebar.number_input("Funding Rounds", 1, 20, 5)
-fa = st.sidebar.number_input("Funding Amount (M USD)", 1.0, 5000.0, 100.0)
-rev = st.sidebar.number_input("Revenue (M USD)", 1.0, 5000.0, 50.0)
-emp = st.sidebar.number_input("Employees", 1, 100000, 500)
-ms = st.sidebar.slider("Market Share (%)", 0.0, 100.0, 5.0)
+# Load dataset FIRST
+df = load_data()
 
-if st.sidebar.button("Predict Valuation"):
-    pred = predict_valuation(
-        model,
-        fr,
-        fa,
-        rev,
-        emp,
-        ms
-    )
+# Train model AFTER loading data
+model, r2, mae = train_valuation_model(df)
 
-    st.sidebar.success(
-        f"Estimated Valuation: ${pred:,.2f} Million"
-    )
+st.title("🚀 Startup Growth & Funding Analytics")
 
-st.sidebar.info(f"Model Accuracy (R² Score): {accuracy:.2f}")
+st.success(f"Dataset Loaded: {len(df)} records")
+st.info(f"Model Accuracy (R²): {r2:.2f}")
+st.info(f"Mean Absolute Error: {mae:.2f}")
+
+st.dataframe(df.head())
