@@ -4,7 +4,7 @@ from utils.ml_modules import (
     feature_importance
 )
 
-model, r2, mae = train_valuation_model(df)
+model, r2, mae = train_valuation_models(df)
 
 st.sidebar.header("🤖 ML Predictor")
 
