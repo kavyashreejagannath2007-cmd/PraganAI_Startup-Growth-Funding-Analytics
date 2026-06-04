@@ -1,5 +1,5 @@
 from utils.ml_modules import (
-    train_valuation_model,
+    train_valuation_models,
     predict_valuation,
     feature_importance
 )
